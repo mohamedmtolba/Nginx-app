@@ -1,0 +1,30 @@
+pipeline {
+    agent any
+    stages {
+        
+        stage('Build') {
+            steps {
+                script {
+                    sh "docker build -t mohamedmtolba/nginx-app:${BUILD_NUMBER} ."
+                    
+                   
+                    sh "docker login -u $USERNAME -p $PASSWORD"
+                    
+                    
+                    sh "docker push mohamedmtolba/nginx-app:${BUILD_NUMBER}"
+                }
+            }
+        }
+        
+        stage('Deploy') {
+            steps {
+                script {
+                    echo "Deploying on Kubernetes..."
+                    sh "kubectl create namespace k8sname"
+                    sh "kubectl -n k8sname apply -f deployment.yml"
+                    sh "kubectl -n k8sname apply -f service.yml"
+                }
+            }
+        }
+    }
+}
