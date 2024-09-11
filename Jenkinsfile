@@ -1,6 +1,11 @@
 pipeline {
     agent any
     stages {
+         stage('Setup') {
+            steps {
+                git branch: 'main', credentialsId: 'GitHub', url: 'https://github.com/mohamedmtolba/Nginx-app.git'
+            }
+        }
         
         stage('Build') {
             steps {
