@@ -8,7 +8,8 @@ pipeline {
                     sh "docker build -t mohamedmtolba/nginx-app:${BUILD_NUMBER} ."
                     
                    
-                    sh "docker login -u $USERNAME -p $PASSWORD"
+                      withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
+                        sh "docker login -u $DOCKER_USER -p $DOCKER_PASS"
                     
                     
                     sh "docker push mohamedmtolba/nginx-app:${BUILD_NUMBER}"
